@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 class KabumProduct():
     def __init__(self, product) -> None:
-        # self.productName = product.find_element(By.CLASS_NAME, "nameCard").text
+        self.productName = product.find_element(By.CLASS_NAME, "nameCard").text
         self.productPrice = product.find_element(By.CLASS_NAME, "priceCard").text.split()[1]
         self.productLink = product.find_element(By.CLASS_NAME, "productLink").get_attribute("href")
 
