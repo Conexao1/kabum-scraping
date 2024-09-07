@@ -1,1 +1,8 @@
 install.txt
+
+*.xlsx
+*.csv
+
+test.py
+
+__pycache__
