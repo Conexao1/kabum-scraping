@@ -1,3 +1,4 @@
+import os
 from scrap import WebScraping
 from typing import Type
 import time
@@ -60,6 +61,7 @@ class KabumScrap(WebScraping):
         priceList = [product.productPrice for product in self.productsList]
         linkList = [product.productLink for product in self.productsList]
         
+        os.makedirs("./outputs", exist_ok=True)
         df = pandas.DataFrame({"Name": nameList, "Price(R$)": priceList, "Link": linkList})
         df.to_csv(f"./outputs/kabum_{outputName}.csv", encoding='utf-8', sep=';')
         df.to_excel(f"./outputs/kabum_{outputName}.xlsx", engine='xlsxwriter')
