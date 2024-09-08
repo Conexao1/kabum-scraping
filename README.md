@@ -1,19 +1,28 @@
-This project is a web scraping at any product category on "Kabum!" website. Searches at all pages, then create a csv and xlsx files outputs.
+# Kabum Web Scraper
 
+This project performs web scraping of products from any category on the Kabum website. It searches through all the pages of the selected category and generates CSV and Excel files containing all the products found in that category.
 
-# Requirements
-  + Python 3.12
-  + Windows
+## Description
 
-## Install
-  + ```
-    pip install selenium
-    ```
-  + ```
-    pip pandas
-     ```
-    For csv.
-  + ```
-    pip install xlsxwriter
-    ```
-    Pandas use it to create xlsx files.
+The project utilizes **Selenium** to automate web browsing tasks and the **Pandas** library for managing data and generating CSV and Excel file outputs. It is designed to scrape product data from Kabum and export it to both CSV and XLSX formats.
+
+## Requirements
+
+- **Python 3.12**
+- **Windows OS**
+
+### Dependencies
+
+- **Selenium**: For automating interactions with the web browser during the scraping process.
+- **Pandas**: For data manipulation and generation of CSV and Excel files.
+- **XlsxWriter**: Used by Pandas to export data to Excel format.
+
+## Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Conexao1/kabum-scraping
+   cd kabum-scraping
+2. **Install the dependencies**:
+   ```bash
+   pip install -r requirements.txt
