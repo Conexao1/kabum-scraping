@@ -1,18 +1,23 @@
-import os
-from scrap import WebScraping
-from typing import Type
 import time
 import pandas
-from math import ceil
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from scrap import WebScraping
+from typing import Type
+from os import makedirs
 
 class KabumProduct():
     def __init__(self, product) -> None:
-        self.productName = product.find_element(By.CLASS_NAME, "nameCard").text
-        self.productPrice = product.find_element(By.CLASS_NAME, "priceCard").text.split()[1]
-        self.productLink = product.find_element(By.CLASS_NAME, "productLink").get_attribute("href")
+        try:
+            self.productName = product.find_element(By.CSS_SELECTOR, "span.nameCard").text
+            self.productPrice = product.find_element(By.CSS_SELECTOR, "span.priceCard").text.split()[1]
+            self.productLink = product.find_element(By.CSS_SELECTOR, "a.productLink").get_attribute("href")
+        except Exception as e:
+            print(f"Find Error: {e}")
+            self.productName = "N/A"
+            self.productPrice = "N/A"
+            self.productLink = "N/A"
 
 class KabumScrap(WebScraping):
     def __init__(self, link) -> None:
@@ -27,31 +32,24 @@ class KabumScrap(WebScraping):
         return driver
 
     def getProducts(self) -> None:
-        driver =  self.setup()
-        driver.get(self.link)
-
-        howManyProducts = driver.find_element(By.ID, "listingCount").text.split()
-        howManyProducts = int(howManyProducts[0])
-
-        if(howManyProducts <= 20):
-            allProducts =  driver.find_elements(By.CLASS_NAME, "productCard")
+        driver =  self.setup()  
+        pageCont = 1
+        try:
+            lastPage =  int(driver.find_elements(By.CSS_SELECTOR, "a.page")[-1].text)
+        except:
+            lastPage = 1
+        while pageCont <= lastPage:
+            print(f"On {pageCont} page.")
+            linkPage = f"{self.link}?page_number={pageCont}&page_size=20&facet_filters=&sort=most_searched"
+            driver.get(linkPage)
+            time.sleep(5)
+            allProducts =  driver.find_elements(By.CSS_SELECTOR, "article.productCard")
 
             for product in allProducts:
                 self.addProduct(KabumProduct(product))
-        else:
-            lastPage = ceil(howManyProducts/20) + 1
 
-            for page in range(1, lastPage):
-                linkPage = f"{self.link}?page_number={page}&page_size=20&facet_filters=&sort=most_searched"
-                driver.get(linkPage)
-                print(f"On {page} page.")
-                time.sleep(3)
-
-                allProducts =  driver.find_elements(By.CLASS_NAME, "productCard")
-
-                for product in allProducts:
-                    self.addProduct(KabumProduct(product))
-        driver.close()
+            pageCont += 1
+        driver.quit()
 
     def addProduct(self, product: Type[KabumProduct]) -> None:
         self.productsList.append(product)
@@ -61,7 +59,7 @@ class KabumScrap(WebScraping):
         priceList = [product.productPrice for product in self.productsList]
         linkList = [product.productLink for product in self.productsList]
         
-        os.makedirs("./outputs", exist_ok=True)
+        makedirs("./outputs", exist_ok=True)
         df = pandas.DataFrame({"Name": nameList, "Price(R$)": priceList, "Link": linkList})
         df.to_csv(f"./outputs/kabum_{outputName}.csv", encoding='utf-8', sep=';')
         df.to_excel(f"./outputs/kabum_{outputName}.xlsx", engine='xlsxwriter')
