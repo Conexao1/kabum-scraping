@@ -13,3 +13,4 @@ else:
     amazon = AmazonScrap(link)
     amazon.getProducts()
     amazon.writeOutput(output)
+

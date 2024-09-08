@@ -72,4 +72,3 @@ class AmazonScrap(WebScraping):
         df = pandas.DataFrame({"Name": nameList, "Price(R$)": priceList, "Link": linkList})
         df.to_csv(f"./outputs/amazon_{outputName}.csv", encoding='utf-8', sep=';')
         df.to_excel(f"./outputs/amazon_{outputName}.xlsx", engine='xlsxwriter')
-
