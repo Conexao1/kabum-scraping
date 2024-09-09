@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from scrap import WebScraping
-from typing import Type
+from typing import Type, List
 from os import makedirs
 
 class KabumProduct():
@@ -21,7 +21,7 @@ class KabumProduct():
 
 class KabumScrap(WebScraping):
     def __init__(self, link) -> None:
-        self.productsList = []
+        self.productsList: List[KabumProduct] = []
         self.link = link
 
     def setup(self) -> webdriver.Chrome:
