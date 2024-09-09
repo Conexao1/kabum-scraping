@@ -27,7 +27,7 @@ class AmazonScrap(WebScraping):
 
     def setup(self) -> webdriver.Chrome:
         chromeOptions = Options()
-        #chromeOptions.add_argument("--headless")
+        chromeOptions.add_argument("--headless")
         driver = webdriver.Chrome(options = chromeOptions)
         return driver
     
